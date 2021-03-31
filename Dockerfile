@@ -50,6 +50,10 @@ RUN echo "Installing Valhalla..." && \
 # Second stage
 FROM ubuntu:20.04 as runner
 
+COPY --from=builder /usr/local /usr/local
+COPY --from=builder /valhalla/scripts /valhalla/scripts
+COPY --from=builder /valhalla/conf /valhalla/conf
+
 RUN apt-get update > /dev/null && \
     export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y libboost-program-options1.71.0 libluajit-5.1-2 \
@@ -57,18 +61,17 @@ RUN apt-get update > /dev/null && \
       libsqlite3-0 libsqlite3-mod-spatialite libgeos-3.8.0 libcurl4 \
       python3.8-minimal curl unzip parallel jq && \
     ln -s /usr/bin/python3.8 /usr/bin/python && \
-    ln -s /usr/bin/python3.8 /usr/bin/python3
+    ln -s /usr/bin/python3.8 /usr/bin/python3 && \
+    # python-minimal doesn't set up dist-packages
+    # for now, also create the valhalla package manually
+    mkdir -p /usr/lib/python3.8/dist-packages/valhalla && \
+    echo "from python_valhalla import *" > /usr/lib/python3.8/dist-packages/valhalla/__init__.py
 
-COPY --from=builder /usr/local /usr/local
-COPY --from=builder /valhalla/scripts /valhalla/scripts
-COPY --from=builder /valhalla/conf /valhalla/conf
 # copy python bindings separately as they need to be in /usr
-COPY --from=builder /usr/lib/python3/dist-packages/valhalla/ /usr/lib/python3/dist-packages/valhalla
-
-ENV LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH}"
-
+COPY --from=builder /usr/local/lib/python3.8/dist-packages/python_valhalla.cpython-38-x86_64-linux-gnu.so /usr/lib/python3.8/dist-packages
 COPY scripts/runtime/. /valhalla/scripts
 
 # Expose the necessary port
 EXPOSE 8002
 CMD /valhalla/scripts/run.sh
+
