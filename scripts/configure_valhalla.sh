@@ -117,7 +117,7 @@ build_admins=${10}
 build_time_zones=${11}
 force_rebuild=${12}
 force_rebuild_elevation=${13}
-use_tiles_only=${14}
+use_tiles_only="True"
 
 # Check for custom file folder and create if it doesn't exist.
 if ! test -f "${custom_tile_folder}"; then
