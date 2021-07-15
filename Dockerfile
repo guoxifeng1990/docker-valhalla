@@ -1,8 +1,13 @@
 FROM ubuntu:18.04
 MAINTAINER Julian Psotta <julian@gis-ops.com>
 
-
-
+# set proxy
+ENV http_proxy=http://irproxy:8082/
+ENV https_proxy=http://irproxy:8082/
+ENV no_proxy=.ifp.fr,.ifpen.fr
+ENV HTTP_PROXY=http://irproxy:8082/
+ENV HTTPS_PROXY=http://irproxy:8082/
+ENV NO_PROXY=.ifp.fr,.ifpen.fr
 
 # Set docker specific settings
 ENV TERM xterm
@@ -44,13 +49,6 @@ ARG PRIMESERVER_RELEASE=0.6.5
 RUN echo "Installing prime_server..." && \
     /bin/bash ${SCRIPTS_DIR}/build_prime_server.sh ${PRIMESERVER_RELEASE}
 
-# set proxy
-ENV http_proxy=http://irproxy:8082/
-ENV https_proxy=http://irproxy:8082/
-ENV no_proxy=.ifp.fr,.ifpen.fr
-ENV HTTP_PROXY=http://irproxy:8082/
-ENV HTTPS_PROXY=http://irproxy:8082/
-ENV NO_PROXY=.ifp.fr,.ifpen.fr
 
 # Build Valhalla
 ARG VALHALLA_RELEASE=dev2
