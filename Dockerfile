@@ -26,14 +26,6 @@ RUN echo "Installing dependencies..." && \
     # Create necessary folders
     mkdir -p /valhalla/scripts /valhalla/conf/valhalla_tiles
 
-# set proxy
-ENV http_proxy=http://irproxy:8082/
-ENV https_proxy=http://irproxy:8082/
-ENV no_proxy=.ifp.fr,.ifpen.fr
-ENV HTTP_PROXY=http://irproxy:8082/
-ENV HTTPS_PROXY=http://irproxy:8082/
-ENV NO_PROXY=.ifp.fr,.ifpen.fr
-
 # Set language
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
@@ -51,6 +43,14 @@ COPY scripts/. ${SCRIPTS_DIR}
 ARG PRIMESERVER_RELEASE=0.6.5
 RUN echo "Installing prime_server..." && \
     /bin/bash ${SCRIPTS_DIR}/build_prime_server.sh ${PRIMESERVER_RELEASE}
+
+# set proxy
+ENV http_proxy=http://irproxy:8082/
+ENV https_proxy=http://irproxy:8082/
+ENV no_proxy=.ifp.fr,.ifpen.fr
+ENV HTTP_PROXY=http://irproxy:8082/
+ENV HTTPS_PROXY=http://irproxy:8082/
+ENV NO_PROXY=.ifp.fr,.ifpen.fr
 
 # Build Valhalla
 ARG VALHALLA_RELEASE=dev2
