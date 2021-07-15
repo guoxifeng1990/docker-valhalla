@@ -1,6 +1,14 @@
 FROM ubuntu:18.04
 MAINTAINER Julian Psotta <julian@gis-ops.com>
 
+# set proxy
+ENV http_proxy=http://irproxy:8082/
+ENV https_proxy=http://irproxy:8082/
+ENV no_proxy=.ifp.fr,.ifpen.fr
+ENV HTTP_PROXY=http://irproxy:8082/
+ENV HTTPS_PROXY=http://irproxy:8082/
+ENV NO_PROXY=.ifp.fr,.ifpen.fr
+
 
 # Set docker specific settings
 ENV TERM xterm
@@ -44,12 +52,20 @@ RUN echo "Installing prime_server..." && \
 
 
 # Build Valhalla
-ARG VALHALLA_RELEASE=dev2
+ARG VALHALLA_RELEASE=3.0.9_updated
 RUN echo "Installing Valhalla..." && \
     /bin/bash ${SCRIPTS_DIR}/build_valhalla.sh ${VALHALLA_RELEASE} && \
     cp -r /valhalla/valhalla_git/scripts/. ${SCRIPTS_DIR} && \
     chmod +x ${SCRIPTS_DIR}/run.sh && \
     apt-get autoclean -y && rm -rf /valhalla/prime_server /valhalla/valhalla_git /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# unset proxy
+ENV http_proxy=
+ENV https_proxy=
+ENV no_proxy=
+ENV HTTP_PROXY=
+ENV HTTPS_PROXY=
+ENV NO_PROXY=
 
 
 
