@@ -3,7 +3,25 @@
 url="https://valhalla_src:SdV2_QWwQ4zTByySZ8_8@gitlab.ifpen.fr/R1130/VHG/valhalla/valhalla_src.git"
 NPROC=$(nproc)
 
+# set proxy
+ENV http_proxy=http://irproxy:8082/
+ENV https_proxy=http://irproxy:8082/
+ENV no_proxy=.ifp.fr,.ifpen.fr
+ENV HTTP_PROXY=http://irproxy:8082/
+ENV HTTPS_PROXY=http://irproxy:8082/
+ENV NO_PROXY=.ifp.fr,.ifpen.fr
+
 git clone $url valhalla_git
+
+# unset proxy
+ENV http_proxy=
+ENV https_proxy=
+ENV no_proxy=
+ENV HTTP_PROXY=
+ENV HTTPS_PROXY=
+ENV NO_PROXY=
+
+
 cd valhalla_git
 git fetch --tags
 git checkout "${1}"
