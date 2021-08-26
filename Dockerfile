@@ -44,7 +44,7 @@ RUN echo "Installing prime_server..." && \
 
 
 # Build Valhalla
-ARG VALHALLA_RELEASE=dev2
+ARG VALHALLA_RELEASE=dev
 RUN echo "Installing Valhalla..." && \
     /bin/bash ${SCRIPTS_DIR}/build_valhalla.sh ${VALHALLA_RELEASE} && \
     cp -r /valhalla/valhalla_git/scripts/. ${SCRIPTS_DIR} && \
